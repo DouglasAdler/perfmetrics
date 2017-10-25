@@ -1465,5 +1465,43 @@ PerfFunction::~PerfFunction()
 		PerfMetrics::PerfExit(m_szName, m_szCategory);
 }
 
+// C entty points
+BEGIN_EXTERN_C
+bool PerfStart()
+{
+    return PerfMetrics::PerfStart();
+}
+bool PerfStop()
+{
+    return PerfMetrics::PerfStop();    
+}
+bool PerfReport()
+{
+    return PerfMetrics::PerfReport();
+}
+bool PerfCleanup()
+{
+    return PerfMetrics::PerfCleanup();
+}
+//    #define PERF_ALLOC(a, s)                (PerfMetrics::PerfAlloc(a, s))
+//    #define PERF_FREE(a)                    (PerfMetrics::PerfFree(a))
+//    #define PERF_FUNC(i)                    PerfFunction FuncMetric(i)
+//    #define PERF_ENTRY(i)                   (PerfMetrics::PerfEntry(i))
+//    #define PERF_EXIT(i)                    (PerfMetrics::PerfExit(i))
+bool PerfEntry(const char * szName, const char * szCategory) 
+{
+    return PerfMetrics::PerfEntry(szName, szCategory);
+}
+bool PerfExit(const char * szName, const char * szCategory)
+{
+    return PerfMetrics::PerfExit(szName, szCategory);    
+}
+void PerfFunction(const char * szName, const char * szCategory)
+{
+    return;
+}
+END_EXTERN_C
+
+
 #endif // FEATURE_PERFORMANCE_PROFILING
 

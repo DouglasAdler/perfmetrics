@@ -60,9 +60,8 @@ SOFTWARE.
 #define PERF_NO                         0
 #define PERF_OK                         1
 
-#ifdef  __cplusplus
 
-#endif // __cplusplus
+
 
 /*
 **---------------------------------------------------------------------
@@ -70,18 +69,35 @@ SOFTWARE.
 **---------------------------------------------------------------------
 */
 #ifdef FEATURE_PERFORMANCE_PROFILING
-#define PERF_START()                    (PerfMetrics::PerfStart())
-#define PERF_STOP()                     (PerfMetrics::PerfStop())
-#define PERF_REPORT()                   (PerfMetrics::PerfReport())
-#define PERF_CLEANUP()                  (PerfMetrics::PerfCleanup())
-#define PERF_ALLOC(a, s)                (PerfMetrics::PerfAlloc(a, s))
-#define PERF_FREE(a)                    (PerfMetrics::PerfFree(a))
-//#define PERF_FUNC(i)                    PerfFunction FuncMetric(i)
-//#define PERF_ENTRY(i)                   (PerfMetrics::PerfEntry(i))
-//#define PERF_EXIT(i)                    (PerfMetrics::PerfExit(i))
-#define PERF_ENTRY(n, c)                (PerfMetrics::PerfEntry(n, c))
-#define PERF_EXIT(n, c)                 (PerfMetrics::PerfExit(n, c))
-#define PERF_FUNC(n, c)                 PerfFunction FuncMetric(n, c)
+#ifdef  __cplusplus
+// C++ entry points
+    #define PERF_START()                    (PerfMetrics::PerfStart())
+    #define PERF_STOP()                     (PerfMetrics::PerfStop())
+    #define PERF_REPORT()                   (PerfMetrics::PerfReport())
+    #define PERF_CLEANUP()                  (PerfMetrics::PerfCleanup())
+    #define PERF_ALLOC(a, s)                (PerfMetrics::PerfAlloc(a, s))
+    #define PERF_FREE(a)                    (PerfMetrics::PerfFree(a))
+//    #define PERF_FUNC(i)                    PerfFunction FuncMetric(i)
+//    #define PERF_ENTRY(i)                   (PerfMetrics::PerfEntry(i))
+//    #define PERF_EXIT(i)                    (PerfMetrics::PerfExit(i))
+    #define PERF_ENTRY(n, c)                (PerfMetrics::PerfEntry(n, c))
+    #define PERF_EXIT(n, c)                 (PerfMetrics::PerfExit(n, c))
+    #define PERF_FUNC(n, c)                 PerfFunction FuncMetric(n, c)
+#else 
+// C entry points
+    #define PERF_START()                    PerfStart()
+    #define PERF_STOP()                     PerfStop()
+    #define PERF_REPORT()                   PerfReport()
+    #define PERF_CLEANUP()                  PerfCleanup()
+//    #define PERF_ALLOC(a, s)                (PerfMetrics::PerfAlloc(a, s))
+//    #define PERF_FREE(a)                    (PerfMetrics::PerfFree(a))
+//    #define PERF_FUNC(i)                    PerfFunction FuncMetric(i)
+//    #define PERF_ENTRY(i)                   (PerfMetrics::PerfEntry(i))
+//    #define PERF_EXIT(i)                    (PerfMetrics::PerfExit(i))
+    #define PERF_ENTRY(n, c)                PerfEntry(n, c)
+    #define PERF_EXIT(n, c)                 PerfExit(n, c)
+    #define PERF_FUNC(n, c)                 PerfFunction(n, c)
+#endif // __cplusplus
 #else
 #define PERF_START()
 #define PERF_STOP()
@@ -150,18 +166,19 @@ private:
 	
 };
 #else	// __cplusplus
-#pragma message("PerfMetrics Class can not be used in a C file")
-#endif // __cplusplus
+//#pragma message("PerfMetrics Class can not be used in a C file")
 
-//BEGIN_EXTERN_C
+BEGIN_EXTERN_C
+
+extern int   PerfStart      ( void );
+extern int   PerfStop       ( void );
+extern int   PerfReport     ( void );
+extern int   PerfEntry      ( const char * szName,  const char * szCategory );
+extern int   PerfExit       ( const char * szName,  const char * szCategory );
+extern int   PerfFunction   ( const char * szName,  const char * szCategory);
 //
-//extern int   PerfStart      ( void );
-//extern int   PerfStop       ( void );
-//extern int   PerfReport     ( void );
-//extern int   PerfEntry      ( PerfID id );
-//extern int   PerfExit       ( PerfID id );
-//
-//END_EXTERN_C
+END_EXTERN_C
+#endif // __cplusplus
 
 #endif 	// FEATURE_PERFORMANCE_PROFILING
 
